@@ -55,7 +55,7 @@ Link al run medido: https://github.com/Kto-PAPS/INF384-lab4-dev/actions/runs/409
 | smoke | 0:13 |
 | e2e | 1:02 |
 | load | 12:13 |
-| **Total** |  |
+| **Total** | 15:23 |
 
 Resultado de load en ese run:
 | Métrica | Valor |
@@ -84,7 +84,8 @@ El SLA tiene un límite menos exigente para dejar un margen operativo entre el o
 
 Cambios para cumplir el presupuesto:
 | Cambio | Job | Minutos recuperados |
-|Reducir la carga constante de 10m a 4m|load |6:04|
+|---|---|---:|
+| Reducir la carga constante de 10m a 4m | load | 6:04 |
 
 Total resultante: 9:09 min
 Link al run en main con los cambios: https://github.com/Kto-PAPS/INF384-lab4-dev/actions/runs/40965633430
@@ -93,10 +94,9 @@ El pipeline pasó de 15:23 a 9:09, con un ahorro total observado de 6:14. De ese
 
 Riesgo aceptado (defecto de la aplicación concreto y efecto en la métrica DORA asignada):
 
-Se redujo la prueba de carga de 12 a 6 minutos, manteniendo 4 minutos de carga constante. El riesgo aceptado es que una degradación por acumulación de recursos, como un crecimiento progresivo de memoria o una ralentización de las transferencias después de varios minutos de uso sostenido, podría no detectarse en la nueva ventana.
+Se redujo la prueba de carga de 12 a 6 minutos, manteniendo 4 minutos de carga constante. El riesgo aceptado es detectar con menor probabilidad una degradación que aparezca después de varios minutos de uso sostenido. Por ejemplo, una fuga de memoria introducida en el procesamiento de POST /transferir podría provocar que las transferencias se vuelvan progresivamente más lentas, sin superar el SLO durante los seis minutos de prueba.
 
-Este riesgo podría aumentar el Change Failure Rate, porque una regresión no detectada podría llegar a producción y ocasionar un fallo que requiera intervención. No significa que la métrica haya aumentado realmente, sino que existe mayor exposición. Se mantienen las pruebas unitarias, de integración, smoke, E2E y el control de carga en main.
-
+Si ese defecto llegara a producción y provocara un incidente que requiriera intervención, el Change Failure Rate subiría, porque aumentaría la proporción de despliegues que ocasionan fallos. No se afirma que actualmente exista esa fuga ni que el CFR haya aumentado. Se mantiene el control de carga en main, junto con las pruebas unitarias, de integración, smoke, E2E y de seguridad, para limitar el riesgo.
 Decisión sobre sast (se queda / se mueve a otra etapa o evento / informativo) y razón:
 
 Se mantiene sast en pre-build y como control bloqueante para hallazgos de severidad ERROR.
