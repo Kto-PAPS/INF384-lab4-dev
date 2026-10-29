@@ -28,11 +28,11 @@ Presupuesto: 13 min  Métrica DORA: change failure rate
 - Corrección: modificar tests. Se incorporó una validación con jq que exige ok:true y que version y commit sean cadenas de texto.
 - Evidencia: En el run inicial, smoke imprimió la respuesta de /salud con ok:true, pero el script original no evaluaba ese campo. La corrección incorpora jq -e para producir un error ante una respuesta no saludable. Run original: https://github.com/Kto-PAPS/INF384-lab4-dev/actions/runs/40957257154/job/123741182030
 ### Defecto 5
-- Job y etapa:
-- Problema que causa en el pipeline:
-- Link al commit:
-- Corrección (una o más: mover de etapa / dejar como informativo / eliminar / ajustar configuración / modificar tests):
-- Evidencia (dato observado, con link al run o fragmento de la salida local):
+- Job y etapa: load, etapa post-deploy.
+- Problema que causa en el pipeline: La prueba de carga completa se ejecutaba en cada pull request, aunque tiene un costo elevado y no es necesaria para obtener retroalimentación rápida de cada cambio. Esto retrasa la validación de los PR y consume recursos de manera innecesaria.
+- Link al commit: https://github.com/Kto-PAPS/INF384-lab4-dev/commit/d3fb7a633a8ad01415299f200820c6d5db827632
+- Corrección (una o más: mover de etapa / dejar como informativo / eliminar / ajustar configuración / modificar tests): ajustar configuración. Se añadió una condición if para omitir load en los pull requests, conservando su ejecución en main y en las ejecuciones manuales.
+- Evidencia (dato observado, con link al run o fragmento de la salida local): En el run inicial del 29/10, el job load tardó 12 minutos y 12 segundos. El workflow original tenía el evento pull_request habilitado y no incluía ninguna condición para omitir ese job. Por tanto, el mismo control costoso se programaba también para los PR. Run: https://github.com/Kto-PAPS/INF384-lab4-dev/actions/runs/40957257154/job/123741466537
 
 ## Parte 2 · Implementación
 - Link al run en verde en main:
