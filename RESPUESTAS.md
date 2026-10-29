@@ -81,6 +81,10 @@ Link al run en main con los cambios:
 
 Riesgo aceptado (defecto de la aplicación concreto y efecto en la métrica DORA asignada):
 
+Se redujo la prueba de carga de 12 a 6 minutos, manteniendo 4 minutos de carga constante. El riesgo aceptado es que una degradación por acumulación de recursos, como un crecimiento progresivo de memoria o una ralentización de las transferencias después de varios minutos de uso sostenido, podría no detectarse en la nueva ventana.
+
+Este riesgo podría aumentar el Change Failure Rate, porque una regresión no detectada podría llegar a producción y ocasionar un fallo que requiera intervención. No significa que la métrica haya aumentado realmente, sino que existe mayor exposición. Se mantienen las pruebas unitarias, de integración, smoke, E2E y el control de carga en main.
+
 Decisión sobre sast (se queda / se mueve a otra etapa o evento / informativo) y razón:
 
 ## Declaración de uso de IA
