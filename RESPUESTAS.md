@@ -22,11 +22,11 @@ Presupuesto: 13 min  Métrica DORA: change failure rate
 - Corrección: ajustar configuración. Se agregó EXPECTED_COMMIT con github.sha al paso Smoke del workflow.
 - Evidencia: En el primer run, el log de smoke mostró la respuesta de /salud con el commit 49ba49ebee84f4c9f8b6943031595970311a3bb6, pero no ejecutó la verificación opcional de EXPECTED_COMMIT. El archivo original no definía esta variable. Run: https://github.com/Kto-PAPS/INF384-lab4-dev/actions/runs/40957257154/job/123741182030
 ### Defecto 4
-- Job y etapa:
-- Problema que causa en el pipeline:
-- Link al commit:
-- Corrección (una o más: mover de etapa / dejar como informativo / eliminar / ajustar configuración / modificar tests):
-- Evidencia (dato observado, con link al run o fragmento de la salida local):
+- Job y etapa: smoke, etapa post-deploy.
+- Problema que causa en el pipeline: La prueba consultaba /salud, pero no validaba el contenido de la respuesta. Un HTTP 200 con ok:false podía pasar inadvertido y permitir que continuaran las pruebas posteriores.
+- Link al commit: https://github.com/Kto-PAPS/INF384-lab4-dev/commit/5d95b8c1a34d42899cd15fe2c30797089558e703
+- Corrección: modificar tests. Se incorporó una validación con jq que exige ok:true y que version y commit sean cadenas de texto.
+- Evidencia: En el run inicial, smoke imprimió la respuesta de /salud con ok:true, pero el script original no evaluaba ese campo. La corrección incorpora jq -e para producir un error ante una respuesta no saludable. Run original: https://github.com/Kto-PAPS/INF384-lab4-dev/actions/runs/40957257154/job/123741182030
 ### Defecto 5
 - Job y etapa:
 - Problema que causa en el pipeline:
