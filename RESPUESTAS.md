@@ -16,11 +16,11 @@ Presupuesto: 13 min  Métrica DORA: change failure rate
 - Corrección: modificar tests. Se configuró k6 para aceptar únicamente HTTP 200, se actualizó el check de transferencias y se redujo el monto de prueba a S/ 0.01 para disminuir rechazos por agotamiento de saldo.
 - Evidencia: En el run inicial, k6 registró 34274 checks exitosos (100 %) y 0 % de http_req_failed. Sin embargo, el check original aceptaba explícitamente respuestas 200 o 400. Esto demuestra que el criterio permitía considerar válidas transferencias rechazadas, aunque el resumen no permite determinar cuántos HTTP 400 ocurrieron. Run: https://github.com/Kto-PAPS/INF384-lab4-dev/actions/runs/40957257154/job/123741466537
 ### Defecto 3
-- Job y etapa:
-- Problema que causa en el pipeline:
-- Link al commit:
-- Corrección (una o más: mover de etapa / dejar como informativo / eliminar / ajustar configuración / modificar tests):
-- Evidencia (dato observado, con link al run o fragmento de la salida local):
+- Job y etapa: smoke, etapa post-deploy.
+- Problema que causa en el pipeline: El script de smoke incluía una verificación del commit desplegado, pero el workflow no configuraba EXPECTED_COMMIT. Por ello, podía aprobar una Lambda que respondiera correctamente aunque ejecutara una versión diferente.
+- Link al commit: https://github.com/Kto-PAPS/INF384-lab4-dev/commit/a4c60e970a34f344c80bc896e9f7edd4231f4e9c
+- Corrección: ajustar configuración. Se agregó EXPECTED_COMMIT con github.sha al paso Smoke del workflow.
+- Evidencia: En el primer run, el log de smoke mostró la respuesta de /salud con el commit 49ba49ebee84f4c9f8b6943031595970311a3bb6, pero no ejecutó la verificación opcional de EXPECTED_COMMIT. El archivo original no definía esta variable. Run: https://github.com/Kto-PAPS/INF384-lab4-dev/actions/runs/40957257154/job/123741182030
 ### Defecto 4
 - Job y etapa:
 - Problema que causa en el pipeline:
