@@ -10,11 +10,11 @@ Presupuesto: 13 min  Métrica DORA: change failure rate
 - Corrección: mover de etapa. Se cambió needs: build-push por needs: deploy, ubicando smoke en post-deploy.
 - Evidencia: En el run inicial del 29/10, smoke y deploy comenzaron a las 21:24:06 UTC, lo que confirma que no existía una dependencia entre ambos. Run: https://github.com/Kto-PAPS/INF384-lab4-dev/actions/runs/40957257154
 ### Defecto 2
-- Job y etapa:
-- Problema que causa en el pipeline:
-- Link al commit:
-- Corrección (una o más: mover de etapa / dejar como informativo / eliminar / ajustar configuración / modificar tests):
-- Evidencia (dato observado, con link al run o fragmento de la salida local):
+- Job y etapa: load, etapa post-deploy.
+- Problema que causa en el pipeline: La prueba de carga aceptaba respuestas HTTP 200 y 400 como correctas. Esto podía ocultar transferencias rechazadas por saldo insuficiente y presentar una tasa de errores engañosa.
+- Link al commit: https://github.com/Kto-PAPS/INF384-lab4-dev/commit/f3403f4961c4d02b20d76fb8420d512ccca84f9a
+- Corrección: modificar tests. Se configuró k6 para aceptar únicamente HTTP 200, se actualizó el check de transferencias y se redujo el monto de prueba a S/ 0.01 para disminuir rechazos por agotamiento de saldo.
+- Evidencia: En el run inicial, k6 registró 34274 checks exitosos (100 %) y 0 % de http_req_failed. Sin embargo, el check original aceptaba explícitamente respuestas 200 o 400. Esto demuestra que el criterio permitía considerar válidas transferencias rechazadas, aunque el resumen no permite determinar cuántos HTTP 400 ocurrieron. Run: https://github.com/Kto-PAPS/INF384-lab4-dev/actions/runs/40957257154/job/123741466537
 ### Defecto 3
 - Job y etapa:
 - Problema que causa en el pipeline:
