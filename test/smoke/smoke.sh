@@ -15,6 +15,7 @@ for i in $(seq 1 "$intentos"); do
   fi
   sleep 5
 done
+echo "$salud" | jq -e '.ok == true and (.version | type == "string") and (.commit | type == "string")' > /dev/null
 echo "salud: ${salud}"
 
 if [ -n "${EXPECTED_COMMIT:-}" ]; then
