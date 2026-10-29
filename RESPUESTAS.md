@@ -87,5 +87,12 @@ Este riesgo podría aumentar el Change Failure Rate, porque una regresión no de
 
 Decisión sobre sast (se queda / se mueve a otra etapa o evento / informativo) y razón:
 
+Se mantiene sast en pre-build y como control bloqueante para hallazgos de severidad ERROR.
+
+En el run #4, sast tardó 19 segundos, un costo pequeño frente al presupuesto de 13 minutos. Moverlo después del despliegue o convertirlo en informativo podría permitir la publicación de código con vulnerabilidades que el análisis sí detecta.
+
+La decisión busca contener el riesgo de incidentes posteriores al despliegue y evitar un posible aumento del Change Failure Rate. No se atribuye una reducción cuantificada de CFR porque no se dispone de datos históricos para medirla.
+
 ## Declaración de uso de IA
 Herramientas usadas y para qué:
+Se utilizó ChatGPT como apoyo para revisar el enunciado, analizar la configuración de GitHub Actions, identificar problemas en el pipeline, plantear correcciones y organizar las respuestas. Los cambios se aplicaron en el repositorio personal y se contrastaron con los commits, ejecuciones y logs de GitHub Actions.
