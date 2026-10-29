@@ -35,11 +35,11 @@ Presupuesto: 13 min  Métrica DORA: change failure rate
 - Evidencia (dato observado, con link al run o fragmento de la salida local): En el run inicial del 29/10, el job load tardó 12 minutos y 12 segundos. El workflow original tenía el evento pull_request habilitado y no incluía ninguna condición para omitir ese job. Por tanto, el mismo control costoso se programaba también para los PR. Run: https://github.com/Kto-PAPS/INF384-lab4-dev/actions/runs/40957257154/job/123741466537
 
 ## Parte 2 · Implementación
-- Link al run en verde en main:
-- Link al pull request:
-- Defecto de la aplicación introducido (archivo y descripción):
-- Job que debería detenerlo:
-- Link al run fallido:
+- Link al run en verde en main: Pendiente de confirmar el run #4: https://github.com/Kto-PAPS/INF384-lab4-dev/actions/runs/40964636437
+- Link al pull request: https://github.com/Kto-PAPS/INF384-lab4-dev/pull/2
+- Defecto de la aplicación introducido (archivo y descripción): En src/util.js se modificó la condición de validación de montos de monto <= 0 a monto < 0. Esto permite incorrectamente transferencias de monto cero. El cambio se realizó exclusivamente en la rama lab4-defecto-controlado.
+- Job que debería detenerlo: unit. El job falló como se esperaba: 26 pruebas aprobadas y 2 fallidas, correspondientes al rechazo del monto cero y a la transferencia con monto inválido. Como build-push depende de unit, se impidió el despliegue de la aplicación defectuosa.
+- Link al run fallido: https://github.com/Kto-PAPS/INF384-lab4-dev/actions/runs/40965261061
 
 ## Parte 3 · Decisión bajo restricción
 Link al run medido:
