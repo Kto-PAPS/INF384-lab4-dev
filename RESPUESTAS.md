@@ -4,11 +4,11 @@ Presupuesto: 13 min  Métrica DORA: change failure rate
 
 ## Parte 1 · Diagnóstico
 ### Defecto 1
-- Job y etapa:
-- Problema que causa en el pipeline:
-- Link al commit:
-- Corrección (una o más: mover de etapa / dejar como informativo / eliminar / ajustar configuración / modificar tests):
-- Evidencia (dato observado, con link al run o fragmento de la salida local):
+- Job y etapa: smoke, originalmente en la etapa deploy.
+- Problema que causa en el pipeline: smoke dependía de build-push, igual que deploy. Por ello, ambos podían ejecutarse en paralelo y smoke podía validar la versión anterior de Lambda antes de que terminara el despliegue de la nueva imagen.
+- Link al commit: https://github.com/Kto-PAPS/INF384-lab4-dev/commit/5820c2d44cca76ebc3c656a39251be19e31dc6e3
+- Corrección: mover de etapa. Se cambió needs: build-push por needs: deploy, ubicando smoke en post-deploy.
+- Evidencia: En el run inicial del 29/10, smoke y deploy comenzaron a las 21:24:06 UTC, lo que confirma que no existía una dependencia entre ambos. Run: https://github.com/Kto-PAPS/INF384-lab4-dev/actions/runs/40957257154
 ### Defecto 2
 - Job y etapa:
 - Problema que causa en el pipeline:
