@@ -35,49 +35,61 @@ Presupuesto: 13 min  Métrica DORA: change failure rate
 - Evidencia (dato observado, con link al run o fragmento de la salida local): En el run inicial del 29/10, el job load tardó 12 minutos y 12 segundos. El workflow original tenía el evento pull_request habilitado y no incluía ninguna condición para omitir ese job. Por tanto, el mismo control costoso se programaba también para los PR. Run: https://github.com/Kto-PAPS/INF384-lab4-dev/actions/runs/40957257154/job/123741466537
 
 ## Parte 2 · Implementación
-- Link al run en verde en main: Pendiente de confirmar el run #4: https://github.com/Kto-PAPS/INF384-lab4-dev/actions/runs/40964636437
+- Link al run en verde en main: Run verde en main, con las cinco correcciones integradas: https://github.com/Kto-PAPS/INF384-lab4-dev/actions/runs/40964636437
 - Link al pull request: https://github.com/Kto-PAPS/INF384-lab4-dev/pull/2
 - Defecto de la aplicación introducido (archivo y descripción): En src/util.js se modificó la condición de validación de montos de monto <= 0 a monto < 0. Esto permite incorrectamente transferencias de monto cero. El cambio se realizó exclusivamente en la rama lab4-defecto-controlado.
 - Job que debería detenerlo: unit. El job falló como se esperaba: 26 pruebas aprobadas y 2 fallidas, correspondientes al rechazo del monto cero y a la transferencia con monto inválido. Como build-push depende de unit, se impidió el despliegue de la aplicación defectuosa.
 - Link al run fallido: https://github.com/Kto-PAPS/INF384-lab4-dev/actions/runs/40965261061
 
 ## Parte 3 · Decisión bajo restricción
-Link al run medido:
+Link al run medido: https://github.com/Kto-PAPS/INF384-lab4-dev/actions/runs/40964636437
 
 | Job | Duración (min:seg) |
 |---|---|
-| unit | |
-| integration | |
-| sast | |
-| sca | |
-| build-push | |
-| deploy | |
-| smoke | |
-| e2e | |
-| load | |
-| **Total** | |
+| unit | 0:11 |
+| integration | 0:10 |
+| sast | 0:19 |
+| sca | 0:19 |
+| build-push | 0:38 |
+| deploy | 0:18 |
+| smoke | 0:13 |
+| e2e | 1:02 |
+| load | 12:13 |
+| **Total** |  |
 
 Resultado de load en ese run:
 | Métrica | Valor |
 |---|---|
-| p90 | |
-| p95 | |
-| Máximo | |
-| Tasa de error | |
-| Requests por segundo | |
+| p90 | 68.63 ms |
+| p95 | 70.96 ms |
+| Máximo | 1.1 s |
+| Tasa de error | 0.00 % |
+| Requests por segundo | 48.72866 req/s |
 
 Conclusión sobre el comportamiento bajo carga:
 
+La prueba de carga ejecutó 35 118 solicitudes con un promedio de 48.73 solicitudes por segundo. El p95 fue de 70.96 ms y la tasa de errores HTTP reportada fue 0 %, cumpliendo los umbrales configurados.
+
+El comportamiento observado fue favorable bajo esta carga, aunque hubo un máximo de 1.1 segundos. Los resultados no garantizan que el sistema mantenga el mismo rendimiento con una concurrencia mayor o durante periodos más largos.
+
 SLO propuesto (percentil, valor, ventana) y justificación:
+
+Se propone mantener un p95 de latencia inferior a 150 ms, medido en ventanas móviles de 30 días. En el run #4 se registró un p95 de 70.96 ms, por lo que el objetivo incorpora un margen para la variación normal del rendimiento. En cada prueba de k6 se evaluará el mismo umbral sobre las solicitudes realizadas durante esa ejecución.
 
 SLA propuesto y diferencia con el SLO:
 
+Se propone un SLA de p95 inferior a 250 ms, evaluado mensualmente para los clientes de Monedero Andino. A diferencia del SLO, que constituye un objetivo interno de operación, el SLA representa un compromiso contractual y podría incluir compensaciones por incumplimiento.
+
+El SLA tiene un límite menos exigente para dejar un margen operativo entre el objetivo interno y el compromiso ofrecido a los clientes. Ambos valores son propuestas; el laboratorio no demuestra todavía su cumplimiento sostenido durante un mes.
+
 Cambios para cumplir el presupuesto:
 | Cambio | Job | Minutos recuperados |
-|---|---|---|
+|Reducir la carga constante de 10m a 4m|load |6:04|
 
-Total resultante: [ ] min
-Link al run en main con los cambios:
+Total resultante: 9:09 min
+Link al run en main con los cambios: https://github.com/Kto-PAPS/INF384-lab4-dev/actions/runs/40965633430
+
+El pipeline pasó de 15:23 a 9:09, con un ahorro total observado de 6:14. De ese ahorro, 6:04 corresponden directamente a load y 0:10 a diferencias de duración de otros jobs entre ejecuciones.
 
 Riesgo aceptado (defecto de la aplicación concreto y efecto en la métrica DORA asignada):
 
