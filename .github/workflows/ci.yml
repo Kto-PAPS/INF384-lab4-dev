@@ -63,7 +63,6 @@ jobs:
           semgrep scan \
             --config p/nodejs \
             --config p/owasp-top-ten \
-            --severity WARNING \
             --severity ERROR \
             --error \
             src/
