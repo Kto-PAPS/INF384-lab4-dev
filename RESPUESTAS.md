@@ -76,6 +76,10 @@ SLO propuesto (percentil, valor, ventana) y justificación:
 
 Se propone mantener un p95 de latencia inferior a 150 ms, medido en ventanas móviles de 30 días. En el run #4 se registró un p95 de 70.96 ms, por lo que el objetivo incorpora un margen para la variación normal del rendimiento. En cada prueba de k6 se evaluará el mismo umbral sobre las solicitudes realizadas durante esa ejecución.
 
+El SLO configurado se validó posteriormente en el run #7 de main: https://github.com/Kto-PAPS/INF384-lab4-dev/actions/runs/40967081696
+
+La prueba registró un p95 de 37.32 ms frente al límite de 150 ms y una tasa de errores de 0 %. Los nueve jobs aprobaron, con una duración total de 9:13, dentro del presupuesto asignado.
+
 SLA propuesto y diferencia con el SLO:
 
 Se propone un SLA de p95 inferior a 250 ms, evaluado mensualmente para los clientes de Monedero Andino. A diferencia del SLO, que constituye un objetivo interno de operación, el SLA representa un compromiso contractual y podría incluir compensaciones por incumplimiento.
@@ -97,6 +101,7 @@ Riesgo aceptado (defecto de la aplicación concreto y efecto en la métrica DORA
 Se redujo la prueba de carga de 12 a 6 minutos, manteniendo 4 minutos de carga constante. El riesgo aceptado es detectar con menor probabilidad una degradación que aparezca después de varios minutos de uso sostenido. Por ejemplo, una fuga de memoria introducida en el procesamiento de POST /transferir podría provocar que las transferencias se vuelvan progresivamente más lentas, sin superar el SLO durante los seis minutos de prueba.
 
 Si ese defecto llegara a producción y provocara un incidente que requiriera intervención, el Change Failure Rate subiría, porque aumentaría la proporción de despliegues que ocasionan fallos. No se afirma que actualmente exista esa fuga ni que el CFR haya aumentado. Se mantiene el control de carga en main, junto con las pruebas unitarias, de integración, smoke, E2E y de seguridad, para limitar el riesgo.
+
 Decisión sobre sast (se queda / se mueve a otra etapa o evento / informativo) y razón:
 
 Se mantiene sast en pre-build y como control bloqueante para hallazgos de severidad ERROR.
